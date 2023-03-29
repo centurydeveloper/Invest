@@ -17,6 +17,7 @@
     "got": "^11.8.0",
     "helmet": "^6.0.0",
     "mathjs": "^10.0.0",
+    "firebase-admin": "^10.0.0",
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.34",
     "morgan": "^1.10.0",
