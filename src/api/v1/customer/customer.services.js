@@ -23,6 +23,6 @@ else{
         console.error(e)
 
         // Throw a new error with a custom message if any errors occur.
-        throw Error('Error while getting medicalReports')
+        throw Error('Error while getting checkUser')
     }
 }

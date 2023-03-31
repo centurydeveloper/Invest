@@ -5,7 +5,8 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const mongoSanitize = require('express-mongo-sanitize');
 const miscMiddlewares = require('../middleware/misc');
-const customerRoute = require('./api/v1/customer/customer.routes'); // API route for medical reports
+const customerRoute = require('./api/v1/customer/customer.routes');
+const kycRoute = require('./api/v1/kyc/kyc.routes');
 require('dotenv').config();
 
 const app = express();
@@ -19,6 +20,8 @@ app.use(bodyParser.json());
 
 //Customer
 app.use('/api/v1/customer', customerRoute);
+//KYC
+app.use('/api/v1/kyc', kycRoute);
 
 //MISC - GETAPI KEYS, GET VERISONS
 
