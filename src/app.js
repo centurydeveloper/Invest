@@ -25,6 +25,24 @@ app.use('/api/v1/kyc', kycRoute);
 
 //MISC - GETAPI KEYS, GET VERISONS
 
+// Verify Token using FirebaseAUTH Token and App Check Token
+
+//GTN
+// Get Server Token
+// Refresh Server Token
+// Customer Creation 
+// Customer Creation Webhook for Knack
+// Place Order 
+// Order DETAILS
+// Order List 
+// Customer Account Details
+// User Account Summary
+// Get Postions
+// Get Cash Statement - PDF
+// Get holdings Statement - PDF
+
+
+
 
 
 app.use(miscMiddlewares.notFound);
