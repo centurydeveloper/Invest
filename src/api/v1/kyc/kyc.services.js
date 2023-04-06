@@ -5,7 +5,8 @@ const fs = require('fs');
 const FormData = require('form-data');
 const {Blob} = require('buffer');
 const { PDFDocument } = require('pdf-lib');
-
+const firebaseAdmin = require('../../../utils/firebaseAdmin');
+const fetch =  require("node-fetch");
 require('dotenv').config();
 
 // These parameters should be used for all requests
@@ -43,7 +44,7 @@ function createSignature(config) {
 
 // https://developers.sumsub.com/api-reference/#access-tokens-for-sdks
 function createAccessToken (externalUserId, levelName = 'basic-kyc-level', ttlInSecs = 600) {
-  console.log("Creating an access token for initializng SDK...");
+//   console.log("Creating an access token for initializng SDK...");
 
   var method = 'post';
   var url = `/resources/accessTokens?userId=${externalUserId}&ttlInSecs=${ttlInSecs}&levelName=${levelName}`;
@@ -64,7 +65,7 @@ function createAccessToken (externalUserId, levelName = 'basic-kyc-level', ttlIn
 
 
 function fixedInfo (externalUserId) {
-    console.log("Creating an access token for initializng SDK...");
+    // console.log("Creating an access token for initializng SDK...");
   
     var method = 'get';
     var url = `/resources/applicants/-;externalUserId=${externalUserId}/one`;
@@ -86,7 +87,7 @@ function fixedInfo (externalUserId) {
 
 
 function generatePDF (applicantId) {
-    console.log("Creating an access token for initializng SDK...");
+    // console.log("Creating an access token for initializng SDK...");
   
     var method = 'get';
     var url = `/resources/applicants/${applicantId}/summary/report?report=applicantReport&lang=en`;
@@ -110,7 +111,7 @@ exports.getAccessToken = async function (req, res, next) {
       
         externalUserId = req.query.externalUserId;
         levelName = 'basic-kyc-level';
-        console.log("External UserID: ", externalUserId); 
+        // console.log("External UserID: ", externalUserId); 
       
         response = await axios(createAccessToken(externalUserId, levelName, 1200))
         .then(function (response) {
@@ -135,7 +136,7 @@ exports.getFixedInfo = async function (req, res, next) {
       
         var externalUserId = req.body.externalUserId;
         levelName = 'basic-kyc-level';
-        console.log("External UserID: ", externalUserId); 
+        // console.log("External UserID: ", externalUserId); 
       
         response = await axios(fixedInfo(externalUserId))
         .then(function (response) {
@@ -208,10 +209,49 @@ exports.SSWebhook = async function (req, res, next) {
         var reviewStatus = data.reviewStatus;
         var externalUserId = data.externalUserId;
         var type = data.type;
-
+// console.log("applicantId: ", applicantId);
         if(type == 'applicationCreated' || type == 'applicationPending') {
                 //KNACK UPDATION
+                
+                var  knackID = process.env.knackID;
+                var knackAPI= process.env.knackAPIKey;
+         
+             
+                var users = await firebaseAdmin.db.collection("Users")
+                .where("externalUserIdForSS", "==", externalUserId)
+                .get();
 
+                 
+            // console.log(users.docs[0].get("Knackobject54ID"))
+                 var url = "https://api.knack.com/v1/objects/object_1/records/"+users.docs[0].get("Knackobject54ID")
+
+                 var response = await fetch(url, {
+                    method: "PUT", // *GET, POST, PUT, DELETE, etc.
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-Knack-Application-Id":knackID.toString(),
+                        "X-Knack-REST-API-Key":knackAPI.toString()
+              
+                      },
+                      body:JSON.stringify(
+                        {
+                            "field_50": externalUserId,
+                            "field_49": applicantId,
+                           
+                        }
+                      )
+                  });
+               
+
+
+                //FIREBASE STEPS Updation
+                firebaseAdmin.db.collection("Users").
+                doc(users.docs[0].id)
+                .update({
+                    "realAccountApplicationQNo":22
+                })
+                
+                
 
         }
 
