@@ -1,4 +1,5 @@
 const fetch =  require("node-fetch");
+const firebaseAdmin = require('../../../utils/firebaseAdmin');
 require('dotenv').config();
 
 
@@ -6,6 +7,11 @@ var TOKEN = "O0AeyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiYnJva2VyIiwibmJ
 exports.createCustomer = async function (req) {
 
     try {
+
+
+        var users = await firebaseAdmin.db.collection("Users")
+        .where("externalUserIdForSS", "==", req.query.externalUserId)
+        .get();
       
         // curl --location 'https://gtn-api-uat.globaltradingnetwork.com/bo/customer-account' \
         // --header 'Authorization: Bearer O0AeyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiYnJva2VyIiwibmJmIjoxNjgwNzgyNzUzLCJwcm92aWRlciI6Im9tcyIsImlzcyI6IkdUTiIsImluc3RDb2RlIjoiQ0VOVFVSWSIsImV4cCI6MTY4MDgxODc1MywidXNlcklkIjoiMTExMTEiLCJpYXQiOjE2ODA3ODI3NTN9.5kO0YpAP5he2-GkRnj38xzcxWshc5-rn6yyVSzJEshA' \
@@ -27,6 +33,17 @@ exports.createCustomer = async function (req) {
                 "institutionCode": process.env.GTN_INSTITUTION_CODE
             }), // body data type must match "Content-Type" header
           });
+
+
+
+
+                //FIREBASE STEPS Updation
+                firebaseAdmin.db.collection("Users").
+                doc(users.docs[0].id)
+                .update({
+                    "brokerReferenceNumber": req.query.referenceNumber
+                })
+                
 
         return response.json();
 
