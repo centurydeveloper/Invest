@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const mongoSanitize = require('express-mongo-sanitize');
 const miscMiddlewares = require('../src/middleware/misc');
 const customerRoute = require('./api/v1/customer/customer.routes');
+const notificationRoute = require('./api/v1/notification/notification.routes');
 const kycRoute = require('./api/v1/kyc/kyc.routes');
 const miscRoute = require('./api/v1/misc/misc.routes');
 const brokerRoute = require('./api/v1/broker/broker.routes');
@@ -18,16 +19,20 @@ require('dotenv').config();
 
 const app = express();
 
+app.use(express.json({ limit: '20kb' })); 
 app.use(morgan());
 app.use(helmet());
 app.use(cors());
 app.use(mongoSanitize());
 app.use(bodyParser.json());
 
-// ## PUBLIC ROUTES ##
+// ## PUBLIC ROUTES
+//Notification
+app.use('/api/v1/notification', notificationRoute);
+
+// ## PUBLIC ROUTES WITH APPCHECK##
 // Verify Token using App Check Token
 // app.use(verifyAppCheckToken);
-
 //Customer
 app.use('/api/v1/customer', customerRoute);
 
