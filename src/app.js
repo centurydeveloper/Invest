@@ -10,8 +10,7 @@ const notificationRoute = require('./api/v1/notification/notification.routes');
 const kycRoute = require('./api/v1/kyc/kyc.routes');
 const miscRoute = require('./api/v1/misc/misc.routes');
 const brokerRoute = require('./api/v1/broker/broker.routes');
-const verifyToken = require('../src/middleware/authTokenValidator');
-const verifyAppCheckToken = require('../src/middleware/appCheckValidator');
+
 
 // Database Connection
 require('../src/utils/connection');
@@ -26,20 +25,11 @@ app.use(cors());
 app.use(mongoSanitize());
 app.use(bodyParser.json());
 
-// ## PUBLIC ROUTES
+
 //Notification
 app.use('/api/v1/notification', notificationRoute);
-
-// ## PUBLIC ROUTES WITH APPCHECK##
-// Verify Token using App Check Token
-// app.use(verifyAppCheckToken);
 //Customer
 app.use('/api/v1/customer', customerRoute);
-
-
-// ## PROTECTED ROUTES ##
-// // Verify Token using FirebaseAUTH Token
-// app.use(verifyToken);
 //KYC
 app.use('/api/v1/kyc', kycRoute);
 //MISC

@@ -1,15 +1,17 @@
 // Import the Express framework module.
 var express = require('express');
-
+const verifyToken = require('../../../middleware/authTokenValidator');
+const verifyAppCheckToken = require('../../../middleware/appCheckValidator');
 // Create a new Router object.
 var router = express.Router();
 
-// Import the MedicalReportController module.
+var middleware = [verifyToken, verifyAppCheckToken];
+
 var KycController = require('./kyc.controller');
 
 
-router.get('/getAccessToken', KycController.getAccessToken)
-router.get('/getFixedInfo', KycController.getFixedInfo)
+router.get('/getAccessToken',middleware, KycController.getAccessToken)
+router.get('/getFixedInfo',middleware, KycController.getFixedInfo)
 // router.get('/generatePDF', KycController.generatePDF)
 router.post('/SSWebhook', KycController.SSWebhook)
 

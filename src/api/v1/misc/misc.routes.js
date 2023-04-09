@@ -4,13 +4,16 @@ var express = require('express');
 // Create a new Router object.
 var router = express.Router();
 
-// Import the MedicalReportController module.
+const verifyToken = require('../../../middleware/authTokenValidator');
+const verifyAppCheckToken = require('../../../middleware/appCheckValidator');
+
 var miscController = require('./misc.controller');
 
+var middleware = [verifyToken, verifyAppCheckToken];
 
-router.get('/getApiKeys', miscController.getApiKeys)
+router.get('/getApiKeys',middleware, miscController.getApiKeys)
 
-router.get('/getVersion', miscController.getVersion)
+router.get('/getVersion',middleware, miscController.getVersion)
 
 
 // Export the router object.
