@@ -10,6 +10,7 @@ const notificationRoute = require('./api/v1/notification/notification.routes');
 const kycRoute = require('./api/v1/kyc/kyc.routes');
 const miscRoute = require('./api/v1/misc/misc.routes');
 const brokerRoute = require('./api/v1/broker/broker.routes');
+const dataRoute = require('./api/v1/data/data.routes');
 
 
 // Database Connection
@@ -36,6 +37,8 @@ app.use('/api/v1/kyc', kycRoute);
 app.use('/api/v1/misc', miscRoute);
 //GTN
 app.use('/api/v1/broker', brokerRoute);
+//Data
+app.use('/api/v1/data', dataRoute);
 
 //BETTER WAY FOR AUTH TOKEN MANAGEMENT
 // Get Server Token
