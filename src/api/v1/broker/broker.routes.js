@@ -11,13 +11,16 @@ var brokerController = require('./broker.controller');
 var middleware = [verifyToken, verifyAppCheckToken];
 
 
+router.get('/getPostions', brokerController.getPostions)
+router.get('/getAccountSummary', brokerController.getAccountSummary)
+router.get('/getCashStatement',brokerController.getCashStatement)
+router.get('/getHoldingStatment' ,brokerController.getHoldingStatment)
+router.get('/getOrderHistory', brokerController.getOrderHistory)
+
+
+
 router.post('/createCustomer', brokerController.createCustomer)
-router.get('/getPostions',middleware, brokerController.getPostions)
-router.get('/getAccountSummary',middleware, brokerController.getAccountSummary)
-router.get('/getCashStatement', middleware,brokerController.getCashStatement)
-router.get('/getHoldingStatment',middleware ,brokerController.getHoldingStatment)
-router.get('/getOrderHistory',middleware, brokerController.getOrderHistory)
-router.get('/placeOrder', middleware,brokerController.placeOrder)
+router.post('/placeOrder',brokerController.placeOrder)
 
 
 // Export the router object.
